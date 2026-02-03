@@ -1,5 +1,6 @@
 # Copier ignore file - exclude non-template files from being copied in the generated project
-# This file itself should not be copied
+# This file itself should not be copied (must be first)
+/.copier-ignore
 .copier-ignore
 
 # Documentation files (not part of generated project)
