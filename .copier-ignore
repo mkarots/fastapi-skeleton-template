@@ -1,9 +1,11 @@
 # Copier ignore file - exclude non-template files from being copied
-# Only files in template/ directory should be copied
+# Copier automatically uses template/ directory as source
 
 # Documentation files (not part of generated project)
-*local_*.md
+ARCHITECTURE.md
+REVIEW.md
 README.md
+*local_*.md
 
 # Git files
 .git/
@@ -24,5 +26,6 @@ venv/
 # OS files
 .DS_Store
 
-# Only copy the template/ directory contents
-# Everything else is excluded
+# Copier config (not needed in generated project)
+copier.yml
+.copier-ignore
