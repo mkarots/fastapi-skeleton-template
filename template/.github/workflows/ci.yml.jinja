@@ -1,4 +1,4 @@
-name: CI
+{% raw %}name: CI
 
 on:
   push:
@@ -49,4 +49,4 @@ jobs:
       uses: docker/setup-buildx-action@v3
     
     - name: Build Docker image
-      run: docker build -t {{ project_name }}:test .
+      run: docker build -t {% endraw %}{{ project_name }}{% raw %}:test .{% endraw %}
