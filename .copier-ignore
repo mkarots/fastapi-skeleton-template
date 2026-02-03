@@ -1,0 +1,29 @@
+# Copier ignore file - exclude non-template files from being copied
+# Only files in template/ directory should be copied
+
+# Documentation files (not part of generated project)
+ARCHITECTURE.md
+REVIEW.md
+README.md
+
+# Git files
+.git/
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+
+# Only copy the template/ directory contents
+# Everything else is excluded
