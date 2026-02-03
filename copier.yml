@@ -26,5 +26,8 @@ use_telemetry:
 
 _tasks:
   - "git init"
-  - "uv sync --extra dev"
-  - "echo '✅ Ready: make run'"
+  - "[ -f pyproject.toml ] && uv sync --extra dev || echo '⚠️  pyproject.toml not found, skipping dependency installation'"
+  - "echo '✅ Project created! Next steps:'"
+  - "echo '   1. cd {{ project_name }}'"
+  - "echo '   2. uv sync --extra dev  (or: make sync)'"
+  - "echo '   3. make run'"
