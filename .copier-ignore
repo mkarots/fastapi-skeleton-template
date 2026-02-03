@@ -2,8 +2,7 @@
 # Only files in template/ directory should be copied
 
 # Documentation files (not part of generated project)
-ARCHITECTURE.md
-REVIEW.md
+*local_*.md
 README.md
 
 # Git files
