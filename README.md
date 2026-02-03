@@ -33,13 +33,6 @@ This template generates a FastAPI project skeleton with:
    cd my-new-service
    ```
 
-   **Note:** If files are created in a `template/` subdirectory, move them to the root:
-   ```bash
-   cd my-new-service
-   mv template/* . && mv template/.* . 2>/dev/null || true
-   rmdir template
-   ```
-
 3. **Set up a virtual environment and install dependencies:**
    ```bash
    python -m venv .venv
