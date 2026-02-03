@@ -86,6 +86,8 @@ my-new-service/
 │   ├── test_api.py
 │   └── test_service.py
 ├── .gitignore               # Git ignore rules
+├── Dockerfile               # Docker image definition
+├── docker-compose.yml       # Docker Compose configuration
 ├── makefile                 # Common development commands
 ├── pyproject.toml           # Project dependencies and config
 └── README.md                # Generated project README
@@ -107,6 +109,39 @@ make test    # Run tests
 make lint    # Check code quality
 make fmt     # Format code
 ```
+
+## Docker
+
+### Building and Running with Docker
+
+**Build the Docker image:**
+```bash
+make docker-build
+# or
+docker build -t my-service:latest .
+```
+
+**Run the container:**
+```bash
+make docker-run
+# or
+docker run -p 8000:8000 my-service:latest
+```
+
+**Using Docker Compose (includes database if SQLAlchemy enabled):**
+```bash
+make docker-compose-up    # Start services
+make docker-compose-logs  # View logs
+make docker-compose-down  # Stop services
+```
+
+**Note:** For reproducible Docker builds, generate a lockfile first:
+```bash
+uv lock              # Generate uv.lock
+git add uv.lock      # Commit to git
+```
+
+The Dockerfile uses `--frozen` mode which requires `uv.lock` to be present.
 
 ## License
 
