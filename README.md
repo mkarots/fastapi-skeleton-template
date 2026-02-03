@@ -4,6 +4,9 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Copier](https://img.shields.io/badge/Copier-Template-00A4DC.svg)](https://copier.readthedocs.io/)
+[![uv](https://img.shields.io/badge/uv-package%20manager-00B4A6.svg)](https://github.com/astral-sh/uv)
+[![Pydantic](https://img.shields.io/badge/Pydantic-2.0+-E92063.svg)](https://docs.pydantic.dev/)
+[![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 A Copier template for quickly scaffolding FastAPI applications with a clean, production-ready structure.
 
