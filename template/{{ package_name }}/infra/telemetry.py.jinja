@@ -1,0 +1,41 @@
+from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class Telemetry:
+    """OpenTelemetry configuration placeholder."""
+    
+    def __init__(self, enabled: bool = False):
+        self.enabled = enabled
+    
+    def start(self) -> None:
+        """Initialize telemetry collection."""
+        if self.enabled:
+            logger.info("Telemetry enabled - configure OpenTelemetry exporters here")
+            # Example: Set up OpenTelemetry SDK, exporters, etc.
+            # from opentelemetry import trace
+            # from opentelemetry.sdk.trace import TracerProvider
+            # trace.set_tracer_provider(TracerProvider())
+        else:
+            logger.debug("Telemetry disabled")
+    
+    def shutdown(self) -> None:
+        """Shutdown telemetry collection."""
+        if self.enabled:
+            logger.info("Shutting down telemetry")
+            # Cleanup telemetry resources
+
+
+def configure_telemetry(enabled: bool = False) -> Telemetry:
+    """
+    Configure telemetry for the application.
+    
+    Args:
+        enabled: Whether telemetry is enabled
+        
+    Returns:
+        Telemetry instance
+    """
+    return Telemetry(enabled=enabled)

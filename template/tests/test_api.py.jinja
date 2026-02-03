@@ -1,0 +1,56 @@
+import pytest
+from fastapi.testclient import TestClient
+
+from {{ package_name }}.main import app
+
+
+@pytest.fixture
+def client():
+    """Create a test client."""
+    return TestClient(app)
+
+
+def test_healthz(client):
+    """Test health check endpoint."""
+    response = client.get("/healthz")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "healthy"
+    assert "service" in data
+    assert "version" in data
+
+
+def test_create_success(client):
+    """Test successful resource creation."""
+    payload = {
+        "name": "Test Resource",
+        "description": "A test resource description"
+    }
+    response = client.post("/create", json=payload)
+    assert response.status_code == 201
+    data = response.json()
+    assert "id" in data
+    assert "reference" in data
+    assert data["reference"].startswith("REF-")
+
+
+def test_create_invalid_input(client):
+    """Test creation with invalid input."""
+    payload = {
+        "name": "AB",  # Too short
+        "description": "A test resource description"
+    }
+    response = client.post("/create", json=payload)
+    assert response.status_code == 400
+    assert "Invalid name" in response.json()["detail"]
+
+
+def test_create_missing_description(client):
+    """Test creation with missing description."""
+    payload = {
+        "name": "Test Resource",
+        "description": ""
+    }
+    response = client.post("/create", json=payload)
+    assert response.status_code == 400
+    assert "Description is required" in response.json()["detail"]
