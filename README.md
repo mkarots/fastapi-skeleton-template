@@ -145,4 +145,4 @@ The Dockerfile uses `--frozen` mode which requires `uv.lock` to be present.
 
 ## License
 
-[Add your license here]
+This template is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. Generated projects will include their own MIT License file.
