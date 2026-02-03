@@ -1,0 +1,30 @@
+_min_copier_version: "9.0.0"
+
+project_name:
+  type: str
+  help: "Project folder name (e.g. codii-api)"
+
+package_name:
+  type: str
+  help: "Python package name (e.g. app, codii_api)"
+  default: "app"
+
+service_name:
+  type: str
+  help: "Service name for logging/telemetry"
+  default: "{{ project_name }}"
+
+use_sqlalchemy:
+  type: bool
+  help: "Include SQLAlchemy DB wiring?"
+  default: true
+
+use_telemetry:
+  type: bool
+  help: "Include telemetry placeholder wiring?"
+  default: true
+
+_tasks:
+  - "git init"
+  - "uv sync --extra dev"
+  - "echo '✅ Ready: make run'"

@@ -1,0 +1,100 @@
+# {{ project_name }}
+
+FastAPI service generated from [fastapi-skeleton-template](https://github.com/mkarots/fastapi-skeleton-template).
+
+## Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   make sync
+   # or
+   uv sync --extra dev
+   ```
+
+2. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. **Run the development server:**
+   ```bash
+   make run
+   # or
+   uvicorn {{ package_name }}.main:app --reload
+   ```
+
+4. **Run tests:**
+   ```bash
+   make test
+   # or
+   pytest
+   ```
+
+5. **Lint and format:**
+   ```bash
+   make lint
+   make fmt
+   ```
+
+## API Documentation
+
+Once the server is running, visit:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+## Health Check
+
+```bash
+curl http://localhost:8000/healthz
+```
+
+## Project Structure
+
+```
+{{ project_name }}/
+├── {{ package_name }}/
+│   ├── __init__.py
+│   ├── api/          # API route definitions
+│   │   └── routes.py
+│   ├── service/      # Business logic
+│   │   └── handlers.py
+│   ├── infra/        # Infrastructure (db, logging, telemetry, middleware)
+│   │   ├── db.py            # Database setup (if enabled)
+│   │   ├── logging.py       # Logging configuration
+│   │   ├── middleware.py    # Request/response middleware
+│   │   └── telemetry.py     # Telemetry setup (if enabled)
+│   ├── config.py     # Configuration management
+│   ├── composition.py # Dependency injection
+│   └── main.py       # Application entry point
+├── tests/            # Test files
+│   ├── test_api.py
+│   └── test_service.py
+├── .env.example      # Environment variables template
+├── .gitignore        # Git ignore rules
+├── makefile          # Common development commands
+└── pyproject.toml    # Project dependencies
+```
+
+## Development
+
+### Running Tests
+
+```bash
+make test
+```
+
+### Code Quality
+
+```bash
+make lint   # Check for issues
+make fmt    # Format code
+```
+
+## Configuration
+
+Configuration is managed through environment variables. See `.env.example` for available options.
+
+## License
+
+[Add your license here]

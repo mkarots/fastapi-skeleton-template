@@ -1,0 +1,92 @@
+import logging
+from typing import Any, Dict
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from {{ package_name }}.config import load_settings
+from {{ package_name }}.infra.middleware import (
+    RequestIDMiddleware,
+    RequestLoggingMiddleware,
+    ErrorHandlingMiddleware,
+)
+from {{ package_name }}.infra.logging import configure_logging
+{% if use_telemetry -%}
+from {{ package_name }}.infra.telemetry import configure_telemetry
+{% endif -%}
+{% if use_sqlalchemy -%}
+from {{ package_name }}.infra.db import create_db
+{% endif -%}
+from {{ package_name }}.service.handlers import ExampleService
+
+
+def build_container() -> Dict[str, Any]:
+    settings = load_settings()
+
+    configure_logging(app_name=settings.app_name, env=settings.env)
+    logger = logging.getLogger(settings.app_name)
+
+    {% if use_telemetry -%}
+    telemetry = configure_telemetry(enabled=settings.otel_enabled)
+    {% else -%}
+    telemetry = None
+    {% endif -%}
+
+    {% if use_sqlalchemy -%}
+    db = create_db(settings.database_url)
+    {% else -%}
+    db = None
+    {% endif -%}
+
+    example_service = ExampleService(logger=logger, telemetry=telemetry, db=db)
+
+    return {
+        "settings": settings,
+        "logger": logger,
+        "telemetry": telemetry,
+        "db": db,
+        "example_service": example_service,
+    }
+
+
+def create_app() -> FastAPI:
+    settings = load_settings()
+    app = FastAPI(
+        title=settings.app_name,
+        version=settings.app_version,
+        description="FastAPI application generated from template",
+    )
+    
+    container = build_container()
+    app.state.container = container
+
+    # Add middleware (order matters - last added is first executed)
+    app.add_middleware(ErrorHandlingMiddleware)
+    app.add_middleware(RequestLoggingMiddleware)
+    app.add_middleware(RequestIDMiddleware)
+    
+    # CORS middleware
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    {% if use_telemetry -%}
+    telemetry = container["telemetry"]
+
+    @app.on_event("startup")
+    def _startup() -> None:
+        telemetry.start()
+
+    @app.on_event("shutdown")
+    def _shutdown() -> None:
+        telemetry.shutdown()
+    {% endif -%}
+
+    from {{ package_name }}.api.routes import router
+    app.include_router(router)
+
+    return app
