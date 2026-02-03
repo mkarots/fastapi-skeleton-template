@@ -1,4 +1,4 @@
-# Copier ignore file - exclude non-template files from being copied in the generated project
+# Copier ignore file - exclude non-template files from being copied
 # This file itself should not be copied (must be first)
 /.copier-ignore
 .copier-ignore
@@ -30,3 +30,7 @@ venv/
 
 # Copier config (not needed in generated project)
 copier.yml
+
+# Test output directories
+test-output/
+test-fastapi/
