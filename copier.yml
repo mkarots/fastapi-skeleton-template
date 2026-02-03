@@ -30,7 +30,6 @@ use_telemetry:
 
 _tasks:
   - "git init"
-  - "if [ -d template ] && [ ! -f pyproject.toml ]; then mv template/* . 2>/dev/null; mv template/.* . 2>/dev/null || true; rmdir template 2>/dev/null || true; fi"
   - "[ -f pyproject.toml ] && uv sync --extra dev || echo '⚠️  pyproject.toml not found, skipping dependency installation'"
   - "echo '✅ Project created! Next steps:'"
   - "echo '   1. cd {{ project_name }}'"

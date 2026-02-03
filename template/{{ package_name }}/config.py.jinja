@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     
     # Logging settings
     log_level: str = "INFO"
+    
+    # Rate limiting settings
+    rate_limit_per_minute: int = 60
 
 
 def load_settings() -> Settings:

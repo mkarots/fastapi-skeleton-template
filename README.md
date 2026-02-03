@@ -19,7 +19,7 @@ This template generates a FastAPI project skeleton with:
 
 - Python 3.11+
 - [Copier](https://copier.readthedocs.io/) installed (`pip install copier` or `pipx install copier`)
-- [uv](https://github.com/astral-sh/uv) (recommended) or pip for package management
+- [uv](https://github.com/astral-sh/uv) (recommended) for package management
 
 ## Usage
 
@@ -33,18 +33,20 @@ This template generates a FastAPI project skeleton with:
    cd my-new-service
    ```
 
-3. **Set up a virtual environment and install dependencies:**
+3. **Install dependencies:**
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   pip install -e .
+   make sync
+   # or
+   uv sync --extra dev
    ```
 
 4. **Run the development server:**
    ```bash
-   uvicorn <package_name>.main:app --reload
+   make run
+   # or
+   uvicorn app.main:app --reload
    ```
-   (Replace `<package_name>` with your chosen package name, default is `app`)
+   (Replace `app` with your chosen package name if different)
 
 The application will be available at `http://localhost:8000` with API documentation at `http://localhost:8000/docs`.
 
@@ -62,28 +64,48 @@ During the `copier copy` process, you'll be prompted for:
 
 ```
 my-new-service/
-├── app/
+├── app/                      # Main package (name customizable)
 │   ├── __init__.py
 │   ├── main.py              # FastAPI app entry point
 │   ├── composition.py        # Dependency injection container
 │   ├── config.py            # Configuration management
 │   ├── api/
+│   │   ├── __init__.py
 │   │   └── routes.py        # API route definitions
 │   ├── service/
+│   │   ├── __init__.py
 │   │   └── handlers.py      # Business logic handlers
 │   └── infra/
+│       ├── __init__.py
 │       ├── db.py            # Database setup (if enabled)
 │       ├── logging.py       # Logging configuration
 │       ├── middleware.py    # Request/response middleware
 │       └── telemetry.py     # Telemetry setup (if enabled)
 ├── tests/                   # Test files
+│   ├── __init__.py
 │   ├── test_api.py
 │   └── test_service.py
-├── .env.example             # Environment variables template
 ├── .gitignore               # Git ignore rules
 ├── makefile                 # Common development commands
 ├── pyproject.toml           # Project dependencies and config
 └── README.md                # Generated project README
+```
+
+## Quick Start After Generation
+
+After running `copier copy`, the template automatically:
+1. Initializes a git repository
+2. Attempts to install dependencies (if `uv` is available)
+3. Provides next steps
+
+Then you can:
+```bash
+cd my-new-service
+make sync    # Install dependencies
+make run     # Start development server
+make test    # Run tests
+make lint    # Check code quality
+make fmt     # Format code
 ```
 
 ## License

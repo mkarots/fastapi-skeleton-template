@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+      - APP_NAME={{ project_name }}-service
+      - LOG_LEVEL=INFO
+      {% if use_sqlalchemy -%}
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/{{ project_name }}
+      {% endif -%}
+    {% if use_sqlalchemy -%}
+    depends_on:
+      - db
+    {% endif -%}
+    volumes:
+      - ./{{ package_name }}:/app/{{ package_name }}
+    restart: unless-stopped
+
+  {% if use_sqlalchemy -%}
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB={{ project_name }}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  {% endif -%}
+volumes:
+  {% if use_sqlalchemy -%}
+  postgres_data:
+  {% endif -%}

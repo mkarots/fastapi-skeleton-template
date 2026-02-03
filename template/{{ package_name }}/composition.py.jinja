@@ -9,6 +9,8 @@ from {{ package_name }}.infra.middleware import (
     RequestIDMiddleware,
     RequestLoggingMiddleware,
     ErrorHandlingMiddleware,
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
 )
 from {{ package_name }}.infra.logging import configure_logging
 {% if use_telemetry -%}
@@ -61,11 +63,22 @@ def create_app() -> FastAPI:
     app.state.container = container
 
     # Add middleware (order matters - last added is first executed)
+    # Security headers (runs first, adds headers to all responses)
+    app.add_middleware(SecurityHeadersMiddleware)
+    
+    # Error handling (runs last, catches all errors)
     app.add_middleware(ErrorHandlingMiddleware)
+    
+    # Request logging (runs second to last)
     app.add_middleware(RequestLoggingMiddleware)
+    
+    # Rate limiting (runs early, before processing)
+    app.add_middleware(RateLimitMiddleware, requests_per_minute=settings.rate_limit_per_minute)
+    
+    # Request ID (runs early, adds ID for tracing)
     app.add_middleware(RequestIDMiddleware)
     
-    # CORS middleware
+    # CORS middleware (runs first, handles CORS)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -86,7 +99,17 @@ def create_app() -> FastAPI:
         telemetry.shutdown()
     {% endif -%}
 
-    from {{ package_name }}.api.routes import router
-    app.include_router(router)
+    # API versioning - include router with /v1 prefix
+    from {{ package_name }}.api.routes import router, healthz
+    from fastapi import Request
+    
+    # Versioned API routes
+    app.include_router(router, prefix="/v1", tags=["v1"])
+    
+    # Health check at root level (no versioning)
+    @app.get("/healthz")
+    async def healthz_root(request: Request):
+        """Health check endpoint (no versioning)."""
+        return healthz(request)
 
     return app

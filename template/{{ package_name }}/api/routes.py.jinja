@@ -54,3 +54,6 @@ def create(payload: CreateIn, svc: ExampleService = Depends(get_svc)):
         return CreateOut(id=res.id, reference=res.reference)
     except ValidationError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# Export healthz function for use in composition.py
+__all__ = ["router", "healthz"]
