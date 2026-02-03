@@ -1,0 +1,56 @@
+from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel
+
+from {{ package_name }}.service.handlers import ExampleService, CreateRequest, ValidationError
+
+router = APIRouter()
+
+class CreateIn(BaseModel):
+    name: str
+    description: str
+
+class CreateOut(BaseModel):
+    id: str
+    reference: str
+
+def get_svc(request: Request) -> ExampleService:
+    return request.app.state.container["example_service"]
+
+@router.get("/healthz")
+def healthz(request: Request):
+    """Health check endpoint with service status."""
+    container = request.app.state.container
+    settings = container["settings"]
+    
+    health_status = {
+        "status": "healthy",
+        "service": settings.app_name,
+        "version": settings.app_version,
+        "environment": settings.env,
+    }
+    
+    # Check database connectivity if enabled
+    {% if use_sqlalchemy -%}
+    db = container.get("db")
+    if db:
+        try:
+            # Simple connectivity check
+            from sqlalchemy import text
+            with db.engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            health_status["database"] = "connected"
+        except Exception as e:
+            health_status["database"] = "disconnected"
+            health_status["status"] = "degraded"
+    {% endif -%}
+    
+    return health_status
+
+@router.post("/create", response_model=CreateOut, status_code=201)
+def create(payload: CreateIn, svc: ExampleService = Depends(get_svc)):
+    """Create a new resource."""
+    try:
+        res = svc.create(CreateRequest(**payload.model_dump()))
+        return CreateOut(id=res.id, reference=res.reference)
+    except ValidationError as e:
+        raise HTTPException(status_code=400, detail=str(e))
