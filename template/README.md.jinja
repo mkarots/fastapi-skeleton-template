@@ -78,6 +78,24 @@ curl http://localhost:8000/healthz
 
 ## Development
 
+### Dependency Management
+
+This project uses `uv` for dependency management. Lock files (`uv.lock`) should be committed to git for reproducible builds.
+
+**Initial setup:**
+```bash
+uv sync --extra dev  # Installs dependencies and generates uv.lock
+```
+
+**When adding/updating dependencies:**
+1. Edit `pyproject.toml`
+2. Run `uv lock` to regenerate `uv.lock`
+3. Commit both files to git
+
+**For production builds:**
+- Ensure `uv.lock` is committed
+- Update Dockerfile to use `--frozen` flag (see Dockerfile comments)
+
 ### Running Tests
 
 ```bash
