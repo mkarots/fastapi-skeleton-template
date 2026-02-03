@@ -1,5 +1,10 @@
 # FastAPI Skeleton Template
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Copier](https://img.shields.io/badge/Copier-Template-00A4DC.svg)](https://copier.readthedocs.io/)
+
 A Copier template for quickly scaffolding FastAPI applications with a clean, production-ready structure.
 
 ## What This Template Provides
